@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { PORTFOLIO_DATA, Project } from '../data/portfolioData';
 import { ArrowRight, ArrowUpRight, Layers, Layout, Smartphone, Cpu } from 'lucide-react';
+import { useSound } from '../hooks/useSound';
 
 interface ProjectsProps {
   onSelectProject: (project: Project) => void;
@@ -8,6 +9,7 @@ interface ProjectsProps {
 
 export const Projects: React.FC<ProjectsProps> = ({ onSelectProject }) => {
   const [activeFilter, setActiveFilter] = useState<string>('All');
+  const { playHover, playClick } = useSound();
 
   const categories = ['All', 'Web Application', 'Systems & Web UI', 'Creative Tool', 'Mobile & Backend'];
 
@@ -211,7 +213,10 @@ export const Projects: React.FC<ProjectsProps> = ({ onSelectProject }) => {
         {categories.map((cat) => (
           <button
             key={cat}
-            onClick={() => setActiveFilter(cat)}
+            onClick={() => {
+              playClick();
+              setActiveFilter(cat);
+            }}
             className={`px-3 py-1.5 font-mono text-xs font-bold border-2 transition-all cursor-pointer ${
               activeFilter === cat
                 ? 'bg-[#111111] dark:bg-[#ECECEE] text-white dark:text-[#111111] border-[#111111] dark:border-[#ECECEE] shadow-[3px_3px_0px_#FFD84D]'
@@ -228,7 +233,11 @@ export const Projects: React.FC<ProjectsProps> = ({ onSelectProject }) => {
         {filteredProjects.map((project) => (
           <article
             key={project.id}
-            onClick={() => onSelectProject(project)}
+            onMouseEnter={() => playHover()}
+            onClick={() => {
+              playClick();
+              onSelectProject(project);
+            }}
             className="group relative bg-[#FFFFFF] dark:bg-[#151518] border-3 border-[#111111] dark:border-[#ECECEE] shadow-[6px_6px_0px_#111111] dark:shadow-[6px_6px_0px_#ECECEE] hover:translate-x-[-4px] hover:translate-y-[-4px] hover:shadow-[10px_10px_0px_#111111] dark:hover:shadow-[10px_10px_0px_#ECECEE] transition-all duration-200 cursor-pointer flex flex-col justify-between"
           >
             {/* Project Card Top Bar */}

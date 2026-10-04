@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { ArrowRight, ArrowUpRight, Code, Layers, Sparkles, Terminal } from 'lucide-react';
 import { PORTFOLIO_DATA } from '../data/portfolioData';
+import { useSound } from '../hooks/useSound';
 
 interface HeroProps {
   onOpenAiScope: () => void;
@@ -8,8 +9,10 @@ interface HeroProps {
 
 export const Hero: React.FC<HeroProps> = ({ onOpenAiScope }) => {
   const [activeTab, setActiveTab] = useState<'visual' | 'code'>('visual');
+  const { playClick, playHover } = useSound();
 
   const scrollToSection = (id: string) => {
+    playClick();
     const el = document.querySelector(id);
     if (el) el.scrollIntoView({ behavior: 'smooth' });
   };
@@ -75,7 +78,10 @@ export const Hero: React.FC<HeroProps> = ({ onOpenAiScope }) => {
             </button>
 
             <button
-              onClick={onOpenAiScope}
+              onClick={() => {
+                playClick();
+                onOpenAiScope();
+              }}
               className="px-4 py-4 font-mono font-bold text-xs sm:text-sm bg-[#FFD84D] text-[#111111] border-2 border-[#111111] shadow-[4px_4px_0px_#111111] hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[6px_6px_0px_#111111] active:translate-x-[2px] active:translate-y-[2px] transition-all flex items-center gap-2 cursor-pointer"
               title="Estimate scope and architecture with AI"
             >
@@ -89,6 +95,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenAiScope }) => {
         {/* Right Column: Creative Visual Card with subtle rotation hover */}
         <div className="lg:col-span-5 flex justify-center lg:justify-end">
           <div
+            onMouseEnter={() => playHover()}
             className="w-full max-w-md bg-[#FFFFFF] dark:bg-[#18181C] border-3 border-[#111111] dark:border-[#ECECEE] shadow-[8px_8px_0px_#111111] dark:shadow-[8px_8px_0px_#ECECEE] rotate-[-2.5deg] hover:rotate-0 hover:translate-y-[-6px] hover:shadow-[12px_12px_0px_#315CFF] dark:hover:shadow-[12px_12px_0px_#B8FF3D] transition-all duration-300 ease-out select-none"
           >
             {/* Window Title Bar */}
@@ -101,7 +108,10 @@ export const Hero: React.FC<HeroProps> = ({ onOpenAiScope }) => {
               <span className="truncate px-2">LORN_DAVID_WORKSPACE.SYS</span>
               <div className="flex gap-1">
                 <button
-                  onClick={() => setActiveTab('visual')}
+                  onClick={() => {
+                    playClick();
+                    setActiveTab('visual');
+                  }}
                   className={`px-2 py-0.5 text-[10px] font-mono border border-[#111111] cursor-pointer transition-colors ${
                     activeTab === 'visual'
                       ? 'bg-[#315CFF] text-white'
@@ -111,7 +121,10 @@ export const Hero: React.FC<HeroProps> = ({ onOpenAiScope }) => {
                   CANVAS
                 </button>
                 <button
-                  onClick={() => setActiveTab('code')}
+                  onClick={() => {
+                    playClick();
+                    setActiveTab('code');
+                  }}
                   className={`px-2 py-0.5 text-[10px] font-mono border border-[#111111] cursor-pointer transition-colors ${
                     activeTab === 'code'
                       ? 'bg-[#315CFF] text-white'

@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { PORTFOLIO_DATA, TechnologyItem } from '../data/portfolioData';
 import { Terminal, Check, Info, Sparkles } from 'lucide-react';
+import { useSound } from '../hooks/useSound';
 
 export const Stack: React.FC = () => {
   const [selectedTech, setSelectedTech] = useState<TechnologyItem | null>(
     PORTFOLIO_DATA.techStack[0]
   );
   const [filterCategory, setFilterCategory] = useState<string>('All');
+  const { playClick, playHover } = useSound();
 
   const categories = [
     'All',
@@ -51,7 +53,10 @@ export const Stack: React.FC = () => {
         {categories.map((cat) => (
           <button
             key={cat}
-            onClick={() => setFilterCategory(cat)}
+            onClick={() => {
+              playClick();
+              setFilterCategory(cat);
+            }}
             className={`px-3 py-1.5 font-mono text-xs font-bold border-2 transition-all cursor-pointer ${
               filterCategory === cat
                 ? 'bg-[#111111] dark:bg-[#ECECEE] text-white dark:text-[#111111] border-[#111111] dark:border-[#ECECEE] shadow-[3px_3px_0px_#FF4FD8]'
@@ -72,7 +77,11 @@ export const Stack: React.FC = () => {
             return (
               <button
                 key={tech.name}
-                onClick={() => setSelectedTech(tech)}
+                onMouseEnter={() => playHover()}
+                onClick={() => {
+                  playClick();
+                  setSelectedTech(tech);
+                }}
                 className={`p-4 text-left border-3 transition-all cursor-pointer flex flex-col justify-between h-28 relative ${
                   isSelected
                     ? 'border-[#111111] dark:border-[#ECECEE] bg-[#FFD84D] text-[#111111] shadow-[6px_6px_0px_#111111] translate-x-[-2px] translate-y-[-2px]'

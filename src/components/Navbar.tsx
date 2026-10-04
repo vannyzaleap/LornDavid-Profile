@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { PORTFOLIO_DATA } from '../data/portfolioData';
-import { Sun, Moon, Menu, X, Sparkles, ArrowRight, Mail, MessageSquare, ExternalLink } from 'lucide-react';
+import { Sun, Moon, Menu, X, Sparkles, ArrowRight, Mail, MessageSquare, Volume2, VolumeX } from 'lucide-react';
+import { useSound } from '../hooks/useSound';
 
 interface NavbarProps {
   darkMode: boolean;
@@ -10,6 +11,7 @@ interface NavbarProps {
 
 export const Navbar: React.FC<NavbarProps> = ({ darkMode, setDarkMode, onOpenAiScope }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { isMuted, toggleSound, playClick, playToggle } = useSound();
 
   // Lock body scroll safely while mobile menu is open
   useEffect(() => {
@@ -44,6 +46,7 @@ export const Navbar: React.FC<NavbarProps> = ({ darkMode, setDarkMode, onOpenAiS
 
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault();
+    playClick();
     setMobileMenuOpen(false);
     // Timeout ensures body overflow: hidden is released before scrolling begins on mobile
     setTimeout(() => {
@@ -56,6 +59,7 @@ export const Navbar: React.FC<NavbarProps> = ({ darkMode, setDarkMode, onOpenAiS
 
   const handleBrandClick = (e: React.MouseEvent) => {
     e.preventDefault();
+    playClick();
     setMobileMenuOpen(false);
     setTimeout(() => {
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -94,8 +98,8 @@ export const Navbar: React.FC<NavbarProps> = ({ darkMode, setDarkMode, onOpenAiS
             ))}
           </nav>
 
-          {/* Zone 3: Actions (Availability status, AI Project Scoper, Theme Toggle, Mobile Menu) */}
-          <div className="flex items-center gap-2 sm:gap-3">
+          {/* Zone 3: Actions (Availability status, AI Project Scoper, Sound Toggle, Theme Toggle, Mobile Menu) */}
+          <div className="flex items-center gap-2 sm:gap-2.5">
             {/* Availability Status Badge (Tablet & Desktop) */}
             <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 text-[11px] font-mono font-bold bg-[#FFFFFF] dark:bg-[#15151A] border-2 border-[#111111] dark:border-[#ECECEE] shadow-[2px_2px_0px_#111111] dark:shadow-[2px_2px_0px_#ECECEE] text-[#111111] dark:text-[#F4F4F6]">
               <span className="w-2 h-2 rounded-full bg-[#10B981] animate-pulse" />
@@ -104,7 +108,10 @@ export const Navbar: React.FC<NavbarProps> = ({ darkMode, setDarkMode, onOpenAiS
 
             {/* AI Project Scoper Button (Medium screens and up) */}
             <button
-              onClick={onOpenAiScope}
+              onClick={() => {
+                playClick();
+                onOpenAiScope();
+              }}
               className="hidden md:flex items-center gap-1.5 px-3 py-1.5 text-xs font-mono font-bold bg-[#FFD84D] text-[#111111] border-2 border-[#111111] shadow-[2px_2px_0px_#111111] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_#111111] active:translate-x-[1px] active:translate-y-[1px] active:shadow-[1px_1px_0px_#111111] transition-all cursor-pointer"
               title="Generate custom project scope and brief with Gemini AI"
             >
@@ -112,9 +119,28 @@ export const Navbar: React.FC<NavbarProps> = ({ darkMode, setDarkMode, onOpenAiS
               <span>AI SCOPE</span>
             </button>
 
+            {/* Tactile Sound FX Toggle */}
+            <button
+              onClick={() => {
+                toggleSound();
+              }}
+              aria-label={isMuted ? 'Unmute tactile sound effects' : 'Mute tactile sound effects'}
+              title={isMuted ? 'Unmute tactile sound effects' : 'Mute tactile sound effects (clicks & hovers)'}
+              className="p-2 sm:p-2.5 bg-white dark:bg-[#15151A] text-[#111111] dark:text-[#F4F4F6] border-2 border-[#111111] dark:border-[#ECECEE] shadow-[2px_2px_0px_#111111] dark:shadow-[2px_2px_0px_#ECECEE] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_#111111] dark:hover:shadow-[3px_3px_0px_#ECECEE] active:translate-x-[1px] active:translate-y-[1px] transition-all cursor-pointer min-w-[38px] min-h-[38px] flex items-center justify-center relative group"
+            >
+              {isMuted ? (
+                <VolumeX className="w-4 h-4 text-[#888888] dark:text-[#888892]" />
+              ) : (
+                <Volume2 className="w-4 h-4 text-[#315CFF] dark:text-[#B8FF3D]" />
+              )}
+            </button>
+
             {/* Theme Toggle (Always visible) */}
             <button
-              onClick={() => setDarkMode((prev) => !prev)}
+              onClick={() => {
+                playToggle();
+                setDarkMode((prev) => !prev);
+              }}
               aria-label={darkMode ? 'Switch to light mode' : 'Switch to dark mode'}
               className="p-2 sm:p-2.5 bg-white dark:bg-[#15151A] text-[#111111] dark:text-[#F4F4F6] border-2 border-[#111111] dark:border-[#ECECEE] shadow-[2px_2px_0px_#111111] dark:shadow-[2px_2px_0px_#ECECEE] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_#111111] dark:hover:shadow-[3px_3px_0px_#ECECEE] active:translate-x-[1px] active:translate-y-[1px] transition-all cursor-pointer min-w-[38px] min-h-[38px] flex items-center justify-center"
             >
@@ -123,7 +149,10 @@ export const Navbar: React.FC<NavbarProps> = ({ darkMode, setDarkMode, onOpenAiS
 
             {/* Mobile Menu Trigger Button */}
             <button
-              onClick={() => setMobileMenuOpen(true)}
+              onClick={() => {
+                playClick();
+                setMobileMenuOpen(true);
+              }}
               aria-label="Open navigation menu"
               aria-expanded={mobileMenuOpen}
               className="lg:hidden p-2 sm:p-2.5 bg-[#FFFFFF] dark:bg-[#15151A] text-[#111111] dark:text-[#F4F4F6] border-2 border-[#111111] dark:border-[#ECECEE] shadow-[2px_2px_0px_#111111] dark:shadow-[2px_2px_0px_#ECECEE] hover:bg-[#FAF9F5] dark:hover:bg-[#202028] active:translate-x-[1px] active:translate-y-[1px] transition-all cursor-pointer min-w-[38px] min-h-[38px] flex items-center justify-center"
@@ -149,10 +178,29 @@ export const Navbar: React.FC<NavbarProps> = ({ darkMode, setDarkMode, onOpenAiS
               <span>{PORTFOLIO_DATA.creator.name}</span>
             </button>
 
-            <div className="flex items-center gap-2 sm:gap-3">
+            <div className="flex items-center gap-2 sm:gap-2.5">
+              {/* Sound Toggle inside overlay */}
+              <button
+                onClick={() => {
+                  toggleSound();
+                }}
+                aria-label={isMuted ? 'Unmute sound effects' : 'Mute sound effects'}
+                title={isMuted ? 'Unmute sound effects' : 'Mute sound effects'}
+                className="p-2 sm:p-2.5 bg-white dark:bg-[#15151A] text-[#111111] dark:text-[#F4F4F6] border-2 border-[#111111] dark:border-[#ECECEE] shadow-[2px_2px_0px_#111111] dark:shadow-[2px_2px_0px_#ECECEE] cursor-pointer min-w-[38px] min-h-[38px] flex items-center justify-center"
+              >
+                {isMuted ? (
+                  <VolumeX className="w-4 h-4 text-[#888888] dark:text-[#888892]" />
+                ) : (
+                  <Volume2 className="w-4 h-4 text-[#315CFF] dark:text-[#B8FF3D]" />
+                )}
+              </button>
+
               {/* Theme Toggle inside overlay */}
               <button
-                onClick={() => setDarkMode((prev) => !prev)}
+                onClick={() => {
+                  playToggle();
+                  setDarkMode((prev) => !prev);
+                }}
                 aria-label={darkMode ? 'Switch to light mode' : 'Switch to dark mode'}
                 className="p-2 sm:p-2.5 bg-white dark:bg-[#15151A] text-[#111111] dark:text-[#F4F4F6] border-2 border-[#111111] dark:border-[#ECECEE] shadow-[2px_2px_0px_#111111] dark:shadow-[2px_2px_0px_#ECECEE] cursor-pointer min-w-[38px] min-h-[38px] flex items-center justify-center"
               >
@@ -161,7 +209,10 @@ export const Navbar: React.FC<NavbarProps> = ({ darkMode, setDarkMode, onOpenAiS
 
               {/* Close Button */}
               <button
-                onClick={() => setMobileMenuOpen(false)}
+                onClick={() => {
+                  playClick();
+                  setMobileMenuOpen(false);
+                }}
                 aria-label="Close navigation menu"
                 className="p-2 sm:p-2.5 bg-[#FF6B35] text-white border-2 border-[#111111] dark:border-[#ECECEE] shadow-[2px_2px_0px_#111111] dark:shadow-[2px_2px_0px_#ECECEE] hover:bg-[#E55A26] active:translate-x-[1px] active:translate-y-[1px] transition-all cursor-pointer min-w-[38px] min-h-[38px] flex items-center justify-center"
               >
@@ -214,6 +265,7 @@ export const Navbar: React.FC<NavbarProps> = ({ darkMode, setDarkMode, onOpenAiS
               {/* Mobile AI Brief Generator Action */}
               <button
                 onClick={() => {
+                  playClick();
                   setMobileMenuOpen(false);
                   setTimeout(() => onOpenAiScope(), 60);
                 }}
@@ -229,6 +281,7 @@ export const Navbar: React.FC<NavbarProps> = ({ darkMode, setDarkMode, onOpenAiS
               <div className="grid grid-cols-2 gap-2 text-xs font-mono font-bold">
                 <a
                   href={`mailto:${PORTFOLIO_DATA.creator.email}`}
+                  onClick={() => playClick()}
                   className="p-2.5 bg-white dark:bg-[#15151A] text-[#111111] dark:text-[#ECECEE] border-2 border-[#111111] dark:border-[#ECECEE] shadow-[2px_2px_0px_#111111] dark:shadow-[2px_2px_0px_#ECECEE] flex items-center justify-center gap-1.5"
                 >
                   <Mail className="w-3.5 h-3.5 text-[#315CFF] dark:text-[#B8FF3D]" />
@@ -236,6 +289,7 @@ export const Navbar: React.FC<NavbarProps> = ({ darkMode, setDarkMode, onOpenAiS
                 </a>
                 <a
                   href={PORTFOLIO_DATA.creator.telegram}
+                  onClick={() => playClick()}
                   target="_blank"
                   rel="noreferrer"
                   className="p-2.5 bg-white dark:bg-[#15151A] text-[#111111] dark:text-[#ECECEE] border-2 border-[#111111] dark:border-[#ECECEE] shadow-[2px_2px_0px_#111111] dark:shadow-[2px_2px_0px_#ECECEE] flex items-center justify-center gap-1.5"

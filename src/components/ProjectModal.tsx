@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { Project } from '../data/portfolioData';
 import { X, ArrowLeft, ArrowRight, ExternalLink, Github, CheckCircle2 } from 'lucide-react';
+import { useSound } from '../hooks/useSound';
 
 interface ProjectModalProps {
   project: Project | null;
@@ -15,16 +16,23 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
   onSelectProject,
   allProjects,
 }) => {
+  const { playClick } = useSound();
+
   useEffect(() => {
     if (!project) return;
 
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
+      if (e.key === 'Escape') {
+        playClick();
+        onClose();
+      }
       const currentIndex = allProjects.findIndex((p) => p.id === project.id);
       if (e.key === 'ArrowRight') {
+        playClick();
         const nextIndex = (currentIndex + 1) % allProjects.length;
         onSelectProject(allProjects[nextIndex]);
       } else if (e.key === 'ArrowLeft') {
+        playClick();
         const prevIndex = (currentIndex - 1 + allProjects.length) % allProjects.length;
         onSelectProject(allProjects[prevIndex]);
       }
@@ -69,7 +77,10 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
           </div>
 
           <button
-            onClick={onClose}
+            onClick={() => {
+              playClick();
+              onClose();
+            }}
             className="p-1.5 bg-[#FFFFFF] dark:bg-[#202025] text-[#111111] dark:text-[#F4F4F6] border-2 border-[#111111] dark:border-[#ECECEE] hover:bg-[#FF6B35] hover:text-white transition-colors cursor-pointer"
             aria-label="Close case study"
           >
@@ -211,7 +222,10 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
         {/* Modal Footer with Previous / Back / Next Navigation */}
         <div className="p-4 sm:p-5 border-t-3 border-[#111111] dark:border-[#ECECEE] bg-[#FFFFFF] dark:bg-[#1A1A1E] flex flex-wrap items-center justify-between gap-4 font-mono text-xs font-bold">
           <button
-            onClick={() => onSelectProject(prevProject)}
+            onClick={() => {
+              playClick();
+              onSelectProject(prevProject);
+            }}
             className="flex items-center gap-2 px-3 py-2 border-2 border-[#111111] dark:border-[#ECECEE] bg-[#F5F3EE] dark:bg-[#202025] hover:bg-[#111111] hover:text-white dark:hover:bg-white dark:hover:text-[#111111] transition-colors cursor-pointer"
           >
             <ArrowLeft className="w-4 h-4" />
@@ -219,14 +233,20 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
           </button>
 
           <button
-            onClick={onClose}
+            onClick={() => {
+              playClick();
+              onClose();
+            }}
             className="px-4 py-2 border-2 border-[#111111] dark:border-[#ECECEE] bg-[#FF6B35] text-white hover:opacity-90 transition-opacity cursor-pointer shadow-[2px_2px_0px_#111111]"
           >
             ← BACK TO WORK
           </button>
 
           <button
-            onClick={() => onSelectProject(nextProject)}
+            onClick={() => {
+              playClick();
+              onSelectProject(nextProject);
+            }}
             className="flex items-center gap-2 px-3 py-2 border-2 border-[#111111] dark:border-[#ECECEE] bg-[#F5F3EE] dark:bg-[#202025] hover:bg-[#111111] hover:text-white dark:hover:bg-white dark:hover:text-[#111111] transition-colors cursor-pointer"
           >
             <span>NEXT: {nextProject.title}</span>

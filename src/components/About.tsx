@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { PORTFOLIO_DATA } from '../data/portfolioData';
 import { Check, Compass, Terminal, Shield, Zap } from 'lucide-react';
+import { useSound } from '../hooks/useSound';
 
 export const About: React.FC = () => {
   const [activePrinciple, setActivePrinciple] = useState(0);
+  const { playClick, playHover } = useSound();
 
   const icons = [Shield, Compass, Zap];
 
@@ -166,7 +168,11 @@ export const About: React.FC = () => {
             return (
               <button
                 key={item.title}
-                onClick={() => setActivePrinciple(index)}
+                onMouseEnter={() => playHover()}
+                onClick={() => {
+                  playClick();
+                  setActivePrinciple(index);
+                }}
                 className={`text-left p-5 border-2 transition-all cursor-pointer ${
                   isSelected
                     ? 'border-[#111111] dark:border-[#ECECEE] bg-[#FFD84D] text-[#111111] shadow-[4px_4px_0px_#111111] dark:shadow-[4px_4px_0px_#ECECEE]'

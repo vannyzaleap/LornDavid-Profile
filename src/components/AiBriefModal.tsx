@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { X, Sparkles, Send, Copy, Check, Terminal, Loader2, ArrowRight } from 'lucide-react';
 import { PORTFOLIO_DATA } from '../data/portfolioData';
+import { useSound } from '../hooks/useSound';
 
 interface AiBriefModalProps {
   isOpen: boolean;
@@ -17,6 +18,7 @@ interface BriefResult {
 }
 
 export const AiBriefModal: React.FC<AiBriefModalProps> = ({ isOpen, onClose }) => {
+  const { playClick, playSuccess } = useSound();
   const [idea, setIdea] = useState('');
   const [projectType, setProjectType] = useState('Full-Stack Web App');
   const [timeline, setTimeline] = useState('4 - 8 Weeks');
@@ -47,6 +49,7 @@ export const AiBriefModal: React.FC<AiBriefModalProps> = ({ isOpen, onClose }) =
     e.preventDefault();
     if (!idea.trim()) return;
 
+    playClick();
     setIsLoading(true);
     setErrorMessage('');
     setBriefResult(null);
@@ -114,6 +117,7 @@ ${briefResult.davidFit}
 --------------------------------------------------
 Generated via LORN David AI Studio Scoper (Phnom Penh, Cambodia)`;
 
+    playSuccess();
     navigator.clipboard.writeText(textToCopy);
     setCopied(true);
     setTimeout(() => setCopied(false), 2500);
@@ -121,6 +125,7 @@ Generated via LORN David AI Studio Scoper (Phnom Penh, Cambodia)`;
 
   const handleSendEmail = () => {
     if (!briefResult) return;
+    playSuccess();
     const subject = encodeURIComponent(`Project Brief: ${projectType} — LORN David Inquiry`);
     const body = encodeURIComponent(`Hi David,
 
@@ -160,7 +165,10 @@ Looking forward to connecting!`);
             <span>AI PROJECT SCOPE & BRIEF ESTIMATOR</span>
           </div>
           <button
-            onClick={onClose}
+            onClick={() => {
+              playClick();
+              onClose();
+            }}
             className="p-1.5 bg-white border-2 border-[#111111] shadow-[2px_2px_0px_#111111] hover:bg-[#FF6B35] hover:text-white transition-colors cursor-pointer"
           >
             <X className="w-5 h-5" />

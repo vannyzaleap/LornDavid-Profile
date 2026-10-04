@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { PORTFOLIO_DATA } from '../data/portfolioData';
 import { ArrowUpRight, Copy, Check, Send, Mail, Github, Linkedin, MessageSquare } from 'lucide-react';
+import { useSound } from '../hooks/useSound';
 
 export const Contact: React.FC = () => {
   const [copiedEmail, setCopiedEmail] = useState(false);
+  const { playClick, playSuccess } = useSound();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -14,6 +16,7 @@ export const Contact: React.FC = () => {
 
   const copyEmailToClipboard = () => {
     navigator.clipboard.writeText(PORTFOLIO_DATA.creator.email);
+    playSuccess();
     setCopiedEmail(true);
     setTimeout(() => setCopiedEmail(false), 2500);
   };
@@ -22,6 +25,7 @@ export const Contact: React.FC = () => {
     e.preventDefault();
     if (!formData.name || !formData.email || !formData.message) return;
 
+    playSuccess();
     const subject = encodeURIComponent(`Project Inquiry: ${formData.category} from ${formData.name}`);
     const body = encodeURIComponent(`Name: ${formData.name}
 Email: ${formData.email}
