@@ -1,0 +1,201 @@
+@import "tailwindcss";
+
+@variant dark (&:where(.dark, .dark *));
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-sans: "Plus Jakarta Sans", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+  --font-display: "Inter", "Plus Jakarta Sans", sans-serif;
+
+  --color-canvas: var(--bg-main);
+  --color-card-surface: var(--bg-card);
+  --color-ink: var(--text-main);
+  --color-ink-muted: var(--text-muted);
+  --color-border-main: var(--border-main);
+
+  --color-electric: var(--accent-electric);
+  --color-lime: var(--accent-lime);
+  --color-orange: var(--accent-orange);
+  --color-pink: var(--accent-pink);
+  --color-yellow: var(--accent-yellow);
+  --color-purple: var(--accent-purple);
+}
+
+:root {
+  color-scheme: light;
+
+  /* Surface and Background System - Neo-Brutalist Light Mode */
+  --bg-main: #F5F3EE;
+  --bg-card: #FFFFFF;
+  --bg-card-muted: #FAF8F5;
+  --bg-subtle: #ECE8DE;
+
+  /* Typography System - High Contrast WCAG AAA */
+  --text-main: #111111;
+  --text-muted: #44444C;
+  --text-subtle: #686872;
+
+  /* Borders & Shadows */
+  --border-main: #111111;
+  --shadow-color: #111111;
+
+  /* Controlled Neo-Brutalist Vibrant Accents */
+  --accent-electric: #315CFF;
+  --accent-lime: #B8FF3D;
+  --accent-orange: #FF6B35;
+  --accent-pink: #FF4FD8;
+  --accent-yellow: #FFD84D;
+  --accent-purple: #8B5CF6;
+}
+
+.dark {
+  color-scheme: dark;
+
+  /* Surface and Background System - Deep Obsidian Dark Mode */
+  --bg-main: #0C0C0E;
+  --bg-card: #15151A;
+  --bg-card-muted: #1B1B22;
+  --bg-subtle: #23232C;
+
+  /* Typography System - High Contrast Legibility */
+  --text-main: #F6F6F8;
+  --text-muted: #B3B3BF;
+  --text-subtle: #848492;
+
+  /* High Contrast Brutalist Borders & Crisp Shadows */
+  --border-main: #ECECEF;
+  --shadow-color: #ECECEF;
+
+  /* Tuned Accents for Rich Contrast in Dark Mode */
+  --accent-electric: #4D74FF;
+  --accent-lime: #B8FF3D;
+  --accent-orange: #FF7B47;
+  --accent-pink: #FF66DE;
+  --accent-yellow: #FFDE59;
+  --accent-purple: #9D74FF;
+}
+
+/* Base resets & Guaranteed Scrolling */
+html {
+  scroll-behavior: smooth;
+  overflow-x: clip;
+  overflow-y: auto;
+  min-height: 100%;
+}
+
+body {
+  background-color: var(--bg-main);
+  color: var(--text-main);
+  font-family: var(--font-sans);
+  overflow-x: clip;
+  overflow-y: visible;
+  min-height: 100%;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Smooth theme transitions across layout surfaces (without lag on child divs) */
+html,
+body,
+header,
+footer,
+nav,
+main,
+section,
+article,
+aside,
+.theme-surface,
+.brutal-card,
+.brutal-btn {
+  transition: background-color 220ms cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 220ms cubic-bezier(0.16, 1, 0.3, 1),
+              color 220ms cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 220ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Exclude continuous animation targets from transition property */
+.animate-marquee,
+.animate-marquee *,
+.animate-pulse,
+.animate-ping,
+.animate-spin {
+  transition: none !important;
+}
+
+/* Custom Neo-Brutalist structural utilities using CSS variables */
+.brutal-border {
+  border: 2px solid var(--border-main);
+}
+
+.brutal-border-3 {
+  border: 3px solid var(--border-main);
+}
+
+.brutal-border-b {
+  border-bottom: 2px solid var(--border-main);
+}
+
+.brutal-border-b-3 {
+  border-bottom: 3px solid var(--border-main);
+}
+
+.brutal-border-t {
+  border-top: 2px solid var(--border-main);
+}
+
+.brutal-border-t-3 {
+  border-top: 3px solid var(--border-main);
+}
+
+.brutal-shadow-sm {
+  box-shadow: 2px 2px 0px var(--shadow-color);
+}
+
+.brutal-shadow {
+  box-shadow: 4px 4px 0px var(--shadow-color);
+}
+
+.brutal-shadow-md {
+  box-shadow: 5px 5px 0px var(--shadow-color);
+}
+
+.brutal-shadow-lg {
+  box-shadow: 6px 6px 0px var(--shadow-color);
+}
+
+.brutal-shadow-xl {
+  box-shadow: 8px 8px 0px var(--shadow-color);
+}
+
+/* Marquee infinite scroll */
+@keyframes marquee {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  display: flex;
+  width: max-content;
+  animation: marquee 26s linear infinite;
+}
+
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee {
+    animation: none;
+  }
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
